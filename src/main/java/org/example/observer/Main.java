@@ -5,20 +5,19 @@ public class Main {
 
         // 1. Instanciamos el servicio real de Weather Channel para Viedma
         ClimaOnline servicioWeather = new WeatherChannelService();
-
-        // 2. Creamos nuestro Medidor
         Medidor medidor = new Medidor(servicioWeather);
 
-        // 3. Creamos los dos observadores independientes
         TemperaturaObserver logger = new LogArchivoObserver("temperaturas_viedma.txt");
-        TemperaturaObserver consolaInteligente = new ConsolaClimaObserver();
+
+        TemperaturaObserver consolaBase = new ConsolaClimaObserver();
+        TemperaturaObserver consolaInteligente = new ClimatizadorDecorator(consolaBase);
 
         // 4. Suscribimos los observadores al medidor
         medidor.registrarObserver(logger);
         medidor.registrarObserver(consolaInteligente);
 
         // 5. Ejecucion
-        System.out.println("=== Gatillando lectura del sensor ===");
+        System.out.println("=== Ejecutando lectura con Observer + Decorador ===");
         medidor.leerTemperatura();
     }
 }
